@@ -1,13 +1,20 @@
+import { Container } from '@/components/Container';
 import { Header } from '@/components/Header';
-
-// page.tsx (server) -> menu.tsx (server) -> link (client)
+import { PostsList } from '@/components/PostsList';
+import { SpinLoader } from '@/components/SpinLoader';
+import { Suspense } from 'react';
 
 export default async function HomePage() {
-  console.log('HomePage');
-
   return (
-    <div>
+    <Container>
       <Header />
-    </div>
+      <Suspense fallback={<SpinLoader />}>
+        <PostsList />
+      </Suspense>
+
+      <footer>
+        <p className='text-6xl font-bold text-center py-8'>Footer</p>
+      </footer>
+    </Container>
   );
 }
