@@ -16,7 +16,6 @@ export function PostHeading({
     h1: 'text-2xl/tight sm:text-4xl font-extrabold',
     h2: 'text-2xl/tight font-bold',
   };
-
   const commonClasses = '';
 
   return (
