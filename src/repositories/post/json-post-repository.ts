@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { PostModel } from '@/models/post/post-model';
 import { PostRepository } from './post-repository';
 import { resolve } from 'path';
@@ -15,24 +14,6 @@ const JSON_POSTS_FILE_PATH = resolve(
 const SIMULATE_WAIT_IN_MS = 0;
 
 export class JsonPostRepository implements PostRepository {
-  findAllPublic(): Promise<PostModel[]> {
-    throw new Error('Method not implemented.');
-  }
-  findBySlugPublic(_slug: string): Promise<PostModel> {
-    throw new Error('Method not implemented.');
-  }
-  create(_post: PostModel): Promise<PostModel> {
-    throw new Error('Method not implemented.');
-  }
-  delete(_id: string): Promise<PostModel> {
-    throw new Error('Method not implemented.');
-  }
-  update(
-    _id: string,
-    _newPostData: Omit<PostModel, 'id' | 'slug' | 'createdAt' | 'updatedAt'>,
-  ): Promise<PostModel> {
-    throw new Error('Method not implemented.');
-  }
   private async simulateWait() {
     if (SIMULATE_WAIT_IN_MS <= 0) return;
 
@@ -46,20 +27,29 @@ export class JsonPostRepository implements PostRepository {
     return posts;
   }
 
-  async findAll(): Promise<PostModel[]> {
+  async findAllPublic(): Promise<PostModel[]> {
     await this.simulateWait();
 
+    console.log('\n', 'findAllPublic', '\n');
+
     const posts = await this.readFromDisk();
-    return posts;
+    return posts.filter(post => post.published);
   }
 
   async findById(id: string): Promise<PostModel> {
-    await this.simulateWait();
-
-    const posts = await this.findAll();
+    const posts = await this.findAllPublic();
     const post = posts.find(post => post.id === id);
 
-    if (!post) throw new Error('Post não encontrado');
+    if (!post) throw new Error('Post não encontrado para ID');
+
+    return post;
+  }
+
+  async findBySlug(slug: string): Promise<PostModel> {
+    const posts = await this.findAllPublic();
+    const post = posts.find(post => post.slug === slug);
+
+    if (!post) throw new Error('Post não encontrado para slug');
 
     return post;
   }
