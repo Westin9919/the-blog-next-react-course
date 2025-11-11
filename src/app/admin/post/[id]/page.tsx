@@ -20,7 +20,7 @@ export default async function AdminPostIdPage({
   params,
 }: AdminPostIdPageProps) {
   const { id } = await params;
-  const post = await findPostByIdAdmin(id).catch(() => undefined);
+  const post = await findPostByIdAdmin(id).catch();
 
   if (!post) notFound();
 
@@ -29,7 +29,7 @@ export default async function AdminPostIdPage({
   return (
     <div className='flex flex-col gap-6'>
       <h1 className='text-xl font-extrabold'>Editar post</h1>
-      <ManagePostForm mode='update' publicPost={publicPost} />
+      <ManagePostForm publicPost={publicPost} />
     </div>
   );
 }
